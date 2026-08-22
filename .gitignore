@@ -1,0 +1,5 @@
+.direnv/
+
+.nix_bash_history
+
+/protosetter
