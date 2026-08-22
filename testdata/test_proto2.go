@@ -1,0 +1,32 @@
+package testdata
+
+import (
+	"github.com/galexrt/protosetter/testdata/proto"
+)
+
+func testInvalidProto2(t *proto.TestProto2) {
+	s := "pointer"
+	*t.D = 1.5      // want `avoid direct access to proto field \*t\.D, use t\.SetD\(1.5\) instead`
+	*t.F = 2.5      // want `avoid direct access to proto field \*t\.F, use t\.SetF\(2.5\) instead`
+	*t.I32 = 3      // want `avoid direct access to proto field \*t\.I32, use t\.SetI32\(3\) instead`
+	*t.I64 = 4      // want `avoid direct access to proto field \*t\.I64, use t\.SetI64\(4\) instead`
+	*t.U32 = 5      // want `avoid direct access to proto field \*t\.U32, use t\.SetU32\(5\) instead`
+	*t.U64 = 6      // want `avoid direct access to proto field \*t\.U64, use t\.SetU64\(6\) instead`
+	*t.T = true     // want `avoid direct access to proto field \*t\.T, use t\.SetT\(true\) instead`
+	t.B = []byte{1} // want `avoid direct access to proto field t\.B, use t\.SetB\(\[\]byte\{1\}\) instead`
+	*t.S = "test"   // want `avoid direct access to proto field \*t\.S, use t\.SetS\("test"\) instead`
+	t.S = &s        // want `avoid direct access to proto field t\.S, use t\.SetS\(s\) instead`
+	t.S = nil       // want `avoid direct access to proto field t\.S, use t\.ClearS\(\) instead`
+}
+
+func testValidProto2(t *proto.TestProto2) {
+	t.SetD(1.5)
+	t.SetF(2.5)
+	t.SetI32(3)
+	t.SetI64(4)
+	t.SetU32(5)
+	t.SetU64(6)
+	t.SetT(true)
+	t.SetB([]byte{1})
+	t.SetS("test")
+}

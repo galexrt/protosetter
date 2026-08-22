@@ -1,0 +1,42 @@
+package testdata
+
+import (
+	"github.com/galexrt/protosetter/testdata/proto"
+)
+
+func testInvalid(t *proto.Test) {
+	optBool := true
+	t.SetD(1.5)                                        // want `avoid direct access to proto field t\.D, use t\.SetD\(1.5\) instead`
+	t.SetS("test")                                     // want `avoid direct access to proto field t\.S, use t\.SetS\("test"\) instead`
+	t.SetB([]byte{1, 2, 3})                            // want `avoid direct access to proto field t\.B, use t\.SetB\(\[\]byte\{1, 2, 3\}\) instead`
+	t.SetI32(7)                                        // want `avoid direct access to proto field t\.I32, use t\.SetI32\(7\) instead`
+	t.SetI32(t.GetI32() + 2)                           // want `avoid direct access to proto field t\.I32, use t\.SetI32\(t\.GetI32\(\) \+ 2\) instead`
+	t.SetI32(t.GetI32() - 3)                           // want `avoid direct access to proto field t\.I32, use t\.SetI32\(t\.GetI32\(\) - 3\) instead`
+	t.SetI32(t.GetI32() + 1)                           // want `avoid direct access to proto field t\.I32, use t\.SetI32\(t\.GetI32\(\) \+ 1\) instead`
+	t.SetI32(t.GetI32() - 1)                           // want `avoid direct access to proto field t\.I32, use t\.SetI32\(t\.GetI32\(\) - 1\) instead`
+	t.SetEmbedded(&proto.Embedded{})                   // want `avoid direct access to proto field t\.Embedded, use t\.SetEmbedded\(&proto\.Embedded\{\}\) instead`
+	t.GetEmbedded().SetS("nested")                     // want `avoid direct access to proto field t\.Embedded\.S, use t\.GetEmbedded\(\)\.SetS\("nested"\) instead`
+	t.GetEmbedded().SetS(t.GetEmbedded().GetS() + "!") // want `avoid direct access to proto field t\.Embedded\.S, use t\.GetEmbedded\(\)\.SetS\(t\.GetEmbedded\(\)\.GetS\(\) \+ "!"\) instead`
+	t.GetEmbedded().GetEmbedded().SetS("deep")         // want `avoid direct access to proto field t\.Embedded\.Embedded\.S, use t\.GetEmbedded\(\)\.GetEmbedded\(\)\.SetS\("deep"\) instead`
+	t.GetRepeatedEmbeddeds()[0].SetS("list")           // want `avoid direct access to proto field t\.RepeatedEmbeddeds\[0\]\.S, use t\.GetRepeatedEmbeddeds\(\)\[0\]\.SetS\("list"\) instead`
+	t.SetMap(map[string]string{"test": "value"})       // want `avoid direct access to proto field t\.Map, use t\.SetMap\(map\[string\]string\{"test": "value"\}\) instead`
+	t.SetOptBool(optBool)                              // want `avoid direct access to proto field t\.OptBool, use t\.SetOptBool\(optBool\) instead`
+	t.ClearOptBool()                                   // want `avoid direct access to proto field t\.OptBool, use t\.ClearOptBool\(\) instead`
+}
+
+func testValid(t *proto.Test) {
+	t.SetD(1.5)
+	t.SetS("test")
+	t.SetB([]byte{1, 2, 3})
+	t.SetI32(7)
+	t.SetI32(t.GetI32() + 2)
+	t.SetI32(t.GetI32() - 3)
+	t.SetI32(t.GetI32() + 1)
+	t.SetI32(t.GetI32() - 1)
+	t.SetEmbedded(&proto.Embedded{})
+	t.GetEmbedded().SetS("nested")
+	t.GetEmbedded().SetS(t.GetEmbedded().GetS() + "!")
+	t.GetEmbedded().GetEmbedded().SetS("deep")
+	t.GetRepeatedEmbeddeds()[0].SetS("list")
+	t.SetMap(map[string]string{"test": "value"})
+}

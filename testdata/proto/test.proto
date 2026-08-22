@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option go_package = "github.com/galexrt/protosetter/testdata/proto";
+
+message Test {
+  double d = 1;
+  float f = 2;
+  int32 i32 = 3;
+  int64 i64 = 4;
+  uint32 u32 = 5;
+  uint64 u64 = 6;
+  bool t = 7;
+  bytes b = 8;
+  string s = 9;
+  Embedded embedded = 10;
+  repeated Embedded repeated_embeddeds = 11;
+
+  // issue #4
+  optional bool opt_bool = 12;
+
+  // Optional enum
+  enum OEnum {
+    O_ENUM1 = 0;
+    O_ENUM2 = 1;
+  }
+  optional OEnum opt_enum = 13;
+
+  map<string, string> map = 14;
+}
+
+message Embedded {
+  string s = 1;
+  Embedded embedded = 2;
+  optional bool opt_bool = 3;
+}
+
+service Testing {
+  rpc call(Test) returns (Test);
+}
